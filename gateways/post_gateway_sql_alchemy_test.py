@@ -2,20 +2,18 @@ from datetime import datetime
 from unittest.case import TestCase
 
 from hamcrest import *
-from sqlalchemy import select, create_engine
+from sqlalchemy import select
 
-from gateways.database.tables import Post, metadata
+from gateways.database.tables import Post
 from gateways.post_gateway_sql_alchemy import PostGatewaySQLAlchemy
+from utils.database_testing import create_database, drop_database
 
 TODAY = datetime.today()
 
 
 class PostGatewayTest(TestCase):
     def setUp(self):
-        self.engine = create_engine('sqlite:///:memory:')
-        metadata.bind = self.engine
-        metadata.create_all()
-        self.post_gateway = PostGatewaySQLAlchemy(self.engine.connect(), TODAY)
+        self.post_gateway = PostGatewaySQLAlchemy(create_database().connect(), TODAY)
 
     def test_create_post(self):
         self.post_gateway.save_post({
@@ -28,4 +26,4 @@ class PostGatewayTest(TestCase):
                     equal_to((1, ':title:', ':slug:', ':content:', TODAY, TODAY)))
 
     def tearDown(self):
-        self.engine.dispose()
+        drop_database()
