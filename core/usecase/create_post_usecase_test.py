@@ -23,4 +23,4 @@ class CreatePostUsecaseTests(TestCase):
         self.usecase.execute(post)
 
         self.post_gateway.save_post.assert_called_with({**post, **{'date': TODAY}})
-        self.presenter.display.assert_called_with(self.usecase.SUCCESS)
+        self.presenter.display.assert_called_with(Presenter.SUCCESS)

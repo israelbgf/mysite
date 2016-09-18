@@ -1,9 +1,8 @@
+from core.utils.presenter import Presenter
 from core.utils.usecase import Usecase
 
 
 class CreatePostUsecase(Usecase):
-    SUCCESS = 0
-
     schema = {
         'title': str,
         'slug': str,
@@ -17,4 +16,4 @@ class CreatePostUsecase(Usecase):
 
     def do(self, input):
         self.post_gateway.save_post({**input, **{'date': self.current_timestamp}})
-        self.presenter.display(self.SUCCESS)
+        self.presenter.display(Presenter.SUCCESS)
