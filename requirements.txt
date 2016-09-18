@@ -2,3 +2,5 @@ flask
 ujson
 voluptuous
 mockextras
+SQLAlchemy
+PyHamcrest

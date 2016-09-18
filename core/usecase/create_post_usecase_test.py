@@ -1,7 +1,6 @@
 from datetime import datetime
 from unittest.case import TestCase
-
-from mock.mock import create_autospec
+from unittest.mock import create_autospec
 
 from core.gateways.post_gateway import PostGateway
 from core.usecase.create_post_usecase import CreatePostUsecase
