@@ -1,7 +1,7 @@
 from core.utils.presenter import Presenter
 
 
-class EmptyPresenterAPI(Presenter):
+class BlankResponsePresenterAPI(Presenter):
     def display(self, message_code, **params):
         pass
 

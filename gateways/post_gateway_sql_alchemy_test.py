@@ -25,5 +25,20 @@ class PostGatewayTest(TestCase):
         assert_that(select([Post]).execute().fetchone(),
                     equal_to((1, ':title:', ':slug:', ':content:', TODAY, TODAY)))
 
+    def test_list_post(self):
+        content = {
+            'title': ':title:',
+            'slug': ':slug:',
+            'content': ':content:',
+            'date': TODAY,
+            'last_updated': TODAY
+        }
+        Post.insert().values(content).execute()
+
+        posts = self.post_gateway.list_posts()
+
+        assert_that(posts, has_length(1))
+        assert_that(posts[0], has_entries({**content, **{'last_updated': TODAY, 'id': 1}}))
+
     def tearDown(self):
         drop_database()

@@ -1,3 +1,5 @@
+from sqlalchemy import select
+
 from core.gateways.post_gateway import PostGateway
 from gateways.database.tables import Post
 
@@ -11,3 +13,6 @@ class PostGatewaySQLAlchemy(PostGateway):
         Post.insert() \
             .values({**post, **{'last_updated': self.current_timestamp}}) \
             .execute()
+
+    def list_posts(self):
+        return [dict(row) for row in select([Post]).execute().fetchall()]
