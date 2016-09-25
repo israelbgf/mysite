@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 
-from gateways.database.tables import metadata
+from database.schema import metadata
 
 engine = None
 

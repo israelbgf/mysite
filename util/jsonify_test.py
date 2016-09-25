@@ -4,7 +4,7 @@ from unittest.case import TestCase
 from hamcrest.core import assert_that
 from hamcrest.core.core.isequal import equal_to
 
-from utils.jsonify import jsonify
+from util.jsonify import jsonify
 
 
 class JsonifyTests(TestCase):

@@ -1,24 +1,24 @@
 import os
 
-from flask import Flask
+import falcon
 from sqlalchemy import create_engine
+from werkzeug.serving import run_simple
 
-from gateways.database.conn_management import close_opened_connection
-from gateways.database.tables import metadata
+from api import PostResource
+from database.schema import metadata
 
-app = Flask(__name__)
-app.connection_pool = create_engine('sqlite:///:memory:')
-metadata.bind = app.connection_pool
 
-if os.environ.get('DEVELOPMENT_SERVER'):
-    metadata.create_all()
+def create_app():
+    engine = create_engine('sqlite:///:memory:')
+    metadata.bind = engine
+    if os.environ.get('CREATE_DATABASE'):
+        metadata.create_all()
 
-try:
-    import api
-except Exception as e:
-    raise e
+    app = falcon.API()
+    app.add_route('/blog/post', PostResource(engine))
 
-app.teardown_appcontext(close_opened_connection)
+    return app
+
 
 if __name__ == '__main__':
-    app.run()
+    run_simple('localhost', 5000, create_app(), use_reloader=True)

@@ -4,9 +4,9 @@ from unittest.case import TestCase
 from hamcrest import *
 from sqlalchemy import select
 
-from gateways.database.tables import Post
-from gateways.post_gateway_sql_alchemy import PostGatewaySQLAlchemy
-from utils.database_testing import create_database, drop_database
+from database.schema import Post
+from gateway.post_gateway_sql_alchemy import PostGatewaySQLAlchemy
+from util.database_testing import create_database, drop_database
 
 TODAY = datetime.today()
 

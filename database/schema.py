@@ -1,6 +1,5 @@
 from sqlalchemy import *
 
-
 metadata = MetaData()
 
 Post = Table('post', metadata,

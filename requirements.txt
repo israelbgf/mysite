@@ -1,6 +1,7 @@
-flask
-ujson
-voluptuous
-mockextras
-SQLAlchemy
-PyHamcrest
+ujson==1.35
+voluptuous==0.9.3
+Werkzeug==0.11.11
+PyHamcrest==1.9.0
+SQLAlchemy==1.0.15
+falcon==1.0.0
+mockextras==1.0.2

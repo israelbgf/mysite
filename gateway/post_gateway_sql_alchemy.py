@@ -1,7 +1,7 @@
 from sqlalchemy import select
 
 from core.gateways.post_gateway import PostGateway
-from gateways.database.tables import Post
+from database.schema import Post
 
 
 class PostGatewaySQLAlchemy(PostGateway):

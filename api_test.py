@@ -1,31 +1,31 @@
 import ujson
 from datetime import date
-from unittest.case import TestCase
+from unittest import TestCase
 
 from hamcrest import has_length
 from hamcrest.core import assert_that
 from hamcrest.core.core.isequal import equal_to
 from hamcrest.library.collection.isdict_containingentries import has_entries
+from werkzeug.test import Client
+from werkzeug.wrappers import BaseResponse
 
-from app import app
-from gateways.post_gateway_sql_alchemy import PostGatewaySQLAlchemy
-from utils.database_testing import create_database, drop_database
+from app import create_app
+from database.schema import metadata
+from gateway.post_gateway_sql_alchemy import PostGatewaySQLAlchemy
 
 
 class IntegratedTest(TestCase):
-    def setUp(self):
-        self.app = app.test_client()
-        self.app.testing = True
-        self.conn_pool = create_database()
-        self.conn = self.conn_pool.connect()
+    @classmethod
+    def setUpClass(cls):
+        cls.client = Client(create_app(), BaseResponse)
 
-    def tearDown(self):
-        drop_database()
+    def setUp(self):
+        self.conn = metadata.bind.connect()
 
 
 class CreatePostTests(IntegratedTest):
     def test_should_create_new_post(self):
-        response = self.app.post('/blog/', data=ujson.dumps({
+        response = self.client.post('/blog/post', data=ujson.dumps({
             'title': 'Welcome!',
             'content': 'lore ipsum',
             'slug': 'first-post'
@@ -43,7 +43,7 @@ class ListPostsTests(IntegratedTest):
             'date': date(2016, 12, 25)
         })
 
-        response = self.app.get('/blog/')
+        response = self.client.get('/blog/post')
 
         assert_that(response.status_code, equal_to(200))
         content = ujson.loads(response.data)
