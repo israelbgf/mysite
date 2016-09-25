@@ -17,7 +17,8 @@ from gateway.post_gateway_sql_alchemy import PostGatewaySQLAlchemy
 class IntegratedTest(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.client = Client(create_app(), BaseResponse)
+        cls.client = Client(create_app(connection_url='sqlite:///:memory:'), BaseResponse)
+        metadata.create_all()
 
     def setUp(self):
         self.conn = metadata.bind.connect()
