@@ -4,13 +4,14 @@ from werkzeug.serving import run_simple
 
 from api import PostResource
 from database.schema import metadata
+from middlewares import CORSMiddleware
 
 
 def create_app(connection_url):
     engine = create_engine(connection_url, echo=True)
     metadata.bind = engine
 
-    app = falcon.API()
+    app = falcon.API(middleware=[CORSMiddleware()])
     app.add_route('/blog/post', PostResource(engine))
     return app
 
