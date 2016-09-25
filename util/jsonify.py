@@ -1,7 +1,6 @@
+import json
 from datetime import date
 from json import JSONEncoder
-
-from flask import json
 
 
 class CustomJSONEncoder(JSONEncoder):
