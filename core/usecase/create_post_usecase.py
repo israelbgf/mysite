@@ -1,12 +1,14 @@
+from voluptuous.schema_builder import Required
+
 from core.utils.presenter import Presenter
 from core.utils.usecase import Usecase
 
 
 class CreatePostUsecase(Usecase):
     schema = {
-        'title': str,
-        'slug': str,
-        'content': str,
+        Required('title'): str,
+        Required('slug'): str,
+        Required('content'): str,
     }
 
     def __init__(self, presenter, post_gateway, current_timestamp):
