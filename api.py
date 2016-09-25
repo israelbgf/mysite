@@ -19,10 +19,10 @@ class PostResource(SQLAlchemyResource):
 
         usecase.execute(ujson.loads(request.stream.read()))
 
-        response.status = falcon.HTTP_200
+        response.status = falcon.HTTP_CREATED
 
     def on_get(self, request, response):
         gateway = PostGatewaySQLAlchemy(self.get_connection(), datetime.today())
 
         response.body = jsonify(gateway.list_posts())
-        response.status = falcon.HTTP_200
+        response.status = falcon.HTTP_OK

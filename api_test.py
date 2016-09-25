@@ -32,7 +32,7 @@ class CreatePostTests(IntegratedTest):
             'slug': 'first-post'
         }), headers={'Content-Type': 'application/json'})
 
-        assert_that(response.status_code, equal_to(200))
+        assert_that(response.status_code, equal_to(201))
 
 
 class ListPostsTests(IntegratedTest):
