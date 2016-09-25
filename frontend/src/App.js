@@ -6,7 +6,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <div id="menu">
+                <div id="menu" style={{float: "left"}}>
                     <div id="logo">
                         <h1>israelbgf</h1>
                     </div>
@@ -15,7 +15,7 @@ class App extends Component {
                         <li><Link to='/blog/' activeClassName="menu-highlight">Blog</Link></li>
                     </ol>
                 </div>
-                <div id="content">
+                <div id="content" style={{float: "left", marginLeft: "10px"}}>
                     {this.props.children}
                 </div>
             </div>
