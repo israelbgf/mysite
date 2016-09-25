@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router'
+import { Link, IndexLink } from 'react-router'
 import './App.css';
 
 class App extends Component {
@@ -11,7 +11,7 @@ class App extends Component {
                         <h1>israelbgf</h1>
                     </div>
                     <ol id="navigation">
-                        <li><Link to='/about/' activeClassName="menu-highlight">About</Link></li>
+                        <li><IndexLink to='/' activeClassName="menu-highlight">About</IndexLink></li>
                         <li><Link to='/blog/' activeClassName="menu-highlight">Blog</Link></li>
                     </ol>
                 </div>
