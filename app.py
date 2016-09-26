@@ -1,3 +1,5 @@
+import os
+
 import falcon
 from sqlalchemy import create_engine
 from werkzeug.serving import run_simple
@@ -10,7 +12,7 @@ from middlewares import CORSMiddleware
 
 
 def create_app(connection_url):
-    engine = create_engine(connection_url, echo=True)
+    engine = create_engine(connection_url, echo=os.environ.get('SQLALCHEMY_ECHO', False))
     metadata.bind = engine
 
     app = falcon.API(middleware=[CORSMiddleware()])
