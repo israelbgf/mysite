@@ -63,11 +63,11 @@ class FindPostBySlugTest(DatabaseTestCase):
         super(FindPostBySlugTest, self).setUp()
         self.post_gateway = PostGatewaySQLAlchemy(self.engine.connect(), TODAY)
 
-    def test_raise_exception_when_dont_find_a_post_by_slug(self):
+    def test_raise_exception_when_doesnt_find_a_post(self):
         with self.assertRaises(PostNotFoundException):
             self.post_gateway.find_post_by_slug('nice-looking-post')
 
-    def test_find_post_by_slug(self):
+    def test_find_post(self):
         content = {
             'title': ':title:',
             'slug': 'nice-looking-post',
