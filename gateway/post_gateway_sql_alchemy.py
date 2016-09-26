@@ -2,6 +2,7 @@ from sqlalchemy import select
 
 from core.gateways.post_gateway import PostGateway
 from database.schema import Post
+from core.exceptions import PostNotFoundException
 
 
 class PostGatewaySQLAlchemy(PostGateway):
@@ -16,3 +17,10 @@ class PostGatewaySQLAlchemy(PostGateway):
 
     def list_posts(self):
         return [dict(row) for row in select([Post]).execute().fetchall()]
+
+    def find_post_by_slug(self, slug):
+        result = select([Post]).where(Post.c.slug == slug).execute().fetchone()
+        if result:
+            return dict(result)
+        else:
+            raise PostNotFoundException
