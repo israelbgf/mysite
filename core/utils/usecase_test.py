@@ -22,3 +22,12 @@ class UsecaseTests(TestCase):
         assert_that(context.exception.errors, has_length(2))
         assert_that(context.exception.errors[0], equal_to(('foo', 'expected int')))
         assert_that(context.exception.errors[1], equal_to(('bar', 'required key not provided')))
+
+    def test_throws_invalid_input_exception_when_input_have_more_field_than_schema(self):
+        SampleUsecase.schema = {"foo": int}
+
+        with self.assertRaises(InvalidInputException) as context:
+            SampleUsecase().execute({"hurl": "???"})
+
+        assert_that(context.exception.errors, has_length(1))
+        assert_that(context.exception.errors[0], equal_to(('hurl', 'extra keys not allowed')))
