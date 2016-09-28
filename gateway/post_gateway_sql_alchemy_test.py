@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from unittest.case import TestCase
 
 from hamcrest import *
@@ -8,7 +8,8 @@ from core.exceptions import PostNotFoundException
 from database.schema import Post, metadata
 from gateway.post_gateway_sql_alchemy import PostGatewaySQLAlchemy
 
-TODAY = datetime.today()
+NOW = datetime.today()
+YESTERDAY = NOW + timedelta(days=-1)
 
 
 class DatabaseTestCase(TestCase):
@@ -24,44 +25,50 @@ class DatabaseTestCase(TestCase):
 class SavePostTest(DatabaseTestCase):
     def setUp(self):
         super(SavePostTest, self).setUp()
-        self.post_gateway = PostGatewaySQLAlchemy(self.engine.connect(), TODAY)
+        self.post_gateway = PostGatewaySQLAlchemy(self.engine.connect(), NOW)
 
     def test_create_post(self):
         self.post_gateway.save_post({
             'title': ':title:',
             'slug': ':slug:',
             'content': ':content:',
-            'date': TODAY})
+            'date': NOW})
 
         assert_that(select([Post]).execute().fetchone(),
-                    equal_to((1, ':title:', ':slug:', ':content:', TODAY, TODAY)))
+                    equal_to((1, ':title:', ':slug:', ':content:', NOW, NOW)))
 
 
 class ListPostTest(DatabaseTestCase):
     def setUp(self):
         super(ListPostTest, self).setUp()
-        self.post_gateway = PostGatewaySQLAlchemy(self.engine.connect(), TODAY)
+        self.post_gateway = PostGatewaySQLAlchemy(self.engine.connect(), NOW)
 
     def test_list_post(self):
         content = {
             'title': ':title:',
             'slug': ':slug:',
             'content': ':content:',
-            'date': TODAY,
-            'last_updated': TODAY
+            'date': YESTERDAY,
+            'last_updated': NOW
         }
         Post.insert().values(content).execute()
 
         posts = self.post_gateway.list_posts()
 
         assert_that(posts, has_length(1))
-        assert_that(posts[0], has_entries({**content, **{'last_updated': TODAY, 'id': 1}}))
+        assert_that(posts[0], has_entries({
+            'id': 1,
+            'title': ':title:',
+            'slug': ':slug:',
+            'date': YESTERDAY,
+            'last_updated': NOW
+        }))
 
 
 class FindPostBySlugTest(DatabaseTestCase):
     def setUp(self):
         super(FindPostBySlugTest, self).setUp()
-        self.post_gateway = PostGatewaySQLAlchemy(self.engine.connect(), TODAY)
+        self.post_gateway = PostGatewaySQLAlchemy(self.engine.connect(), NOW)
 
     def test_raise_exception_when_doesnt_find_a_post(self):
         with self.assertRaises(PostNotFoundException):
@@ -72,11 +79,11 @@ class FindPostBySlugTest(DatabaseTestCase):
             'title': ':title:',
             'slug': 'nice-looking-post',
             'content': ':content:',
-            'date': TODAY,
-            'last_updated': TODAY
+            'date': YESTERDAY,
+            'last_updated': NOW
         }
         Post.insert().values(content).execute()
 
         post = self.post_gateway.find_post_by_slug('nice-looking-post')
 
-        assert_that(post, has_entries({**content, **{'last_updated': TODAY, 'id': 1}}))
+        assert_that(post, has_entries({**content, **{'last_updated': NOW, 'id': 1}}))

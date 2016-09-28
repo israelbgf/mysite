@@ -16,7 +16,9 @@ class PostGatewaySQLAlchemy(PostGateway):
             .execute()
 
     def list_posts(self):
-        return [dict(row) for row in select([Post]).execute().fetchall()]
+        return [dict(row) for row in select([
+            Post.c.id, Post.c.title, Post.c.slug,
+            Post.c.date, Post.c.last_updated]).execute().fetchall()]
 
     def find_post_by_slug(self, slug):
         result = select([Post]).where(Post.c.slug == slug).execute().fetchone()

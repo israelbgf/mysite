@@ -2,10 +2,9 @@ import ujson
 from datetime import date
 from unittest import TestCase
 
-from hamcrest import has_length
+from hamcrest import has_length, has_key, has_entries
 from hamcrest.core import assert_that
 from hamcrest.core.core.isequal import equal_to
-from hamcrest.library.collection.isdict_containingentries import has_entries
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 
@@ -49,9 +48,9 @@ class ListPostsTests(IntegratedTest):
         assert_that(response.status_code, equal_to(200))
         content = ujson.loads(response.data)
         assert_that(content, has_length(1))
+        assert_that(content[0], has_key('id'))
         assert_that(content[0], has_entries({
             'title': 'Welcome!',
-            'content': 'lore ipsum',
             'slug': 'first-post',
             'date': '2016-12-25 00:00:00'
         }))
