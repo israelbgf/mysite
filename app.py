@@ -4,7 +4,7 @@ import falcon
 from sqlalchemy import create_engine
 from werkzeug.serving import run_simple
 
-from api import PostResource
+from api import PostResource, SinglePostResource
 from core.utils.usecase import InvalidInputException
 from database.schema import metadata
 from error_handlers import invalid_input_exception_handler
@@ -18,6 +18,7 @@ def create_app(connection_url):
     app = falcon.API(middleware=[CORSMiddleware()])
     app.add_error_handler(InvalidInputException, invalid_input_exception_handler)
     app.add_route('/blog/post', PostResource(engine))
+    app.add_route('/blog/{slug}', SinglePostResource(engine))
     return app
 
 

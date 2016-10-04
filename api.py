@@ -26,3 +26,11 @@ class PostResource(SQLAlchemyResource):
 
         response.body = jsonify(gateway.list_posts())
         response.status = falcon.HTTP_OK
+
+
+class SinglePostResource(SQLAlchemyResource):
+    def on_get(self, request, response, slug):
+        gateway = PostGatewaySQLAlchemy(self.get_connection(), datetime.today())
+
+        response.body = jsonify(gateway.find_post_by_slug(slug))
+        response.status = falcon.HTTP_OK

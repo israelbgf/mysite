@@ -54,3 +54,25 @@ class ListPostsTests(IntegratedTest):
             'slug': 'first-post',
             'date': '2016-12-25 00:00:00'
         }))
+
+
+class GetPostBySlugTests(IntegratedTest):
+    def test_should_list_existing_posts(self):
+        PostGatewaySQLAlchemy(self.conn, date(2016, 12, 25)).save_post({
+            'title': 'Welcome!',
+            'content': 'lore ipsum',
+            'slug': 'first-post',
+            'date': date(2016, 12, 25)
+        })
+
+        response = self.client.get('/blog/first-post')
+
+        assert_that(response.status_code, equal_to(200))
+        content = ujson.loads(response.data)
+        assert_that(content, has_key('id'))
+        assert_that(content, has_entries({
+            'title': 'Welcome!',
+            'content': 'lore ipsum',
+            'slug': 'first-post',
+            'date': '2016-12-25 00:00:00'
+        }))
