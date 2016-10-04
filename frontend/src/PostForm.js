@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { browserHistory } from 'react-router'
 
 class PostForm extends Component {
 
@@ -53,10 +53,27 @@ class PostForm extends Component {
 
     handleSubmit(event) {
         event.preventDefault()
-        if(this.state.title && this.state.slug && this.state.content)
-            console.log('valid!')
+        if (this.state.title && this.state.slug && this.state.content)
+            this.createPost()
     }
 
+    createPost() {
+        fetch('http://localhost:5000/blog/post', {
+            method: 'post',
+            body: JSON.stringify({
+                title: this.state.title,
+                slug: this.state.slug,
+                content: this.state.content,
+            }),
+            headers: {'Content-Type': 'application/json'}
+        }).then((response) => {
+            if (response.ok){
+                alert('Post created.')
+                browserHistory.push('/blog/')
+            }
+        })
+
+    }
 }
 
 export default PostForm
