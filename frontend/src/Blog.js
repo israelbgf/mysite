@@ -13,10 +13,9 @@ class Blog extends Component {
     componentDidMount() {
         fetch('http://localhost:5000/blog/post')
             .then((response) => {
-                return response.json()
-            })
-            .then((data) => {
-                this.setState({posts: data})
+                return response.json().then((data) => {
+                    this.setState({posts: data})
+                })
             })
     }
 
@@ -27,6 +26,7 @@ class Blog extends Component {
                     {this.state.posts.map((post, index) =>
                         <li key={post.id}>
                             <Link to={`/blog/${post.slug}/`}>{post.title}</Link>
+                            <p>{post.date}</p>
                         </li>)
                     }
                 </ol>
