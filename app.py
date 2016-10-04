@@ -8,7 +8,7 @@ from api import PostResource, SinglePostResource
 from core.exceptions import EntityNotFoundException
 from core.utils.usecase import InvalidInputException
 from database.schema import metadata
-from error_handlers import invalid_input_exception_handler, entity_not_found_exception_handler
+from error_handlers import invalid_input_for_usecase, unhandled_entity_not_found
 from middlewares import CORSMiddleware
 
 
@@ -17,8 +17,8 @@ def create_app(connection_url):
     metadata.bind = engine
 
     app = falcon.API(middleware=[CORSMiddleware()])
-    app.add_error_handler(InvalidInputException, invalid_input_exception_handler)
-    app.add_error_handler(EntityNotFoundException, entity_not_found_exception_handler)
+    app.add_error_handler(InvalidInputException, invalid_input_for_usecase)
+    app.add_error_handler(EntityNotFoundException, unhandled_entity_not_found)
 
     app.add_route('/blog/post', PostResource(engine))
     app.add_route('/blog/{slug}', SinglePostResource(engine))
