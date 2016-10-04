@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router'
 import Post from './Post'
 
 class Blog extends Component {
@@ -23,13 +24,17 @@ class Blog extends Component {
     render() {
         return (
             <div>
-                {this.state.posts.map((post, index) =>
-                    <Post
-                        key={post.id}
-                        title={post.title}
-                        content={post.content}
-                        date={post.date}/>)
-                }
+                <ol>
+                    {this.state.posts.map((post, index) =>
+                        <li key={post.id}>
+                            <Post
+                                title={post.title}
+                                content={post.content}
+                                date={post.date}/>
+                        </li>)
+                    }
+                </ol>
+                <Link to='/blog/post'>New Post</Link>
             </div>
         )
     }
