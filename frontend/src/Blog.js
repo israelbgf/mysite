@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router'
-import Post from './Post'
 
 class Blog extends Component {
 
@@ -27,10 +26,7 @@ class Blog extends Component {
                 <ol>
                     {this.state.posts.map((post, index) =>
                         <li key={post.id}>
-                            <Post
-                                title={post.title}
-                                content={post.content}
-                                date={post.date}/>
+                            <Link to={`/blog/${post.slug}/`}>{post.title}</Link>
                         </li>)
                     }
                 </ol>
