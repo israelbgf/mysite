@@ -16,6 +16,7 @@ ReactDOM.render((
             <IndexRoute component={About}/>
             <Route path="blog" component={Blog}/>
             <Route path="blog/post" component={PostForm}/>
+            <Route path="blog/post/:id/" component={PostForm}/>
             <Route path="blog/:slug/" component={PostReader}/>
         </Route>
         <Route path="*" component={NoMatch}/>

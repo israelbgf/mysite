@@ -29,8 +29,13 @@ class PostResource(SQLAlchemyResource):
 
 
 class SinglePostResource(SQLAlchemyResource):
-    def on_get(self, request, response, slug):
+    def on_get(self, request, response, identifier):
         gateway = PostGatewaySQLAlchemy(self.get_connection(), datetime.today())
 
-        response.body = jsonify(gateway.find_post_by_slug(slug))
+        try:
+            post = gateway.find_post_by_id(int(identifier))
+        except ValueError:
+            post = gateway.find_post_by_slug(identifier)
+
+        response.body = jsonify(post)
         response.status = falcon.HTTP_OK

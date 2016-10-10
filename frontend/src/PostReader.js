@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router'
 
 class PostReader extends Component {
 
@@ -11,7 +12,7 @@ class PostReader extends Component {
 
 
     componentDidMount() {
-        fetch(`http://localhost:5000/blog/${this.props.params.slug}`)
+        fetch(`http://localhost:5000/blog/post/${this.props.params.slug}`)
             .then((response) => {
                 if (response.ok)
                     response.json().then((data) =>
@@ -26,6 +27,9 @@ class PostReader extends Component {
                 <h1>{this.state.post.title}</h1>
                 <p>{this.state.post.date}</p>
                 <p>{this.state.post.content}</p>
+                <div>
+                    <Link to={`/blog/post/${this.state.post.id}/`}>Edit</Link>
+                </div>
             </div>
         )
     }

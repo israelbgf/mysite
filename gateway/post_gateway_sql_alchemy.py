@@ -26,3 +26,10 @@ class PostGatewaySQLAlchemy(PostGateway):
             return dict(result)
         else:
             raise PostNotFoundException
+
+    def find_post_by_id(self, id):
+        result = select([Post]).where(Post.c.id == id).execute().fetchone()
+        if result:
+            return dict(result)
+        else:
+            raise PostNotFoundException

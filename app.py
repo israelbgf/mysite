@@ -21,7 +21,7 @@ def create_app(connection_url):
     app.add_error_handler(EntityNotFoundException, unhandled_entity_not_found)
 
     app.add_route('/blog/post', PostResource(engine))
-    app.add_route('/blog/{slug}', SinglePostResource(engine))
+    app.add_route('/blog/post/{identifier}', SinglePostResource(engine))
     return app
 
 

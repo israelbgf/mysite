@@ -22,11 +22,13 @@ class DatabaseTestCase(TestCase):
         self.engine.dispose()
 
 
-class SavePostTest(DatabaseTestCase):
+class PostGatewayTestCase(DatabaseTestCase):
     def setUp(self):
-        super(SavePostTest, self).setUp()
+        super(PostGatewayTestCase, self).setUp()
         self.post_gateway = PostGatewaySQLAlchemy(self.engine.connect(), NOW)
 
+
+class SavePostTest(PostGatewayTestCase):
     def test_create_post(self):
         self.post_gateway.save_post({
             'title': ':title:',
@@ -38,11 +40,7 @@ class SavePostTest(DatabaseTestCase):
                     equal_to((1, ':title:', ':slug:', ':content:', NOW, NOW)))
 
 
-class ListPostTest(DatabaseTestCase):
-    def setUp(self):
-        super(ListPostTest, self).setUp()
-        self.post_gateway = PostGatewaySQLAlchemy(self.engine.connect(), NOW)
-
+class ListPostTest(PostGatewayTestCase):
     def test_list_post(self):
         content = {
             'title': ':title:',
@@ -65,11 +63,7 @@ class ListPostTest(DatabaseTestCase):
         }))
 
 
-class FindPostBySlugTest(DatabaseTestCase):
-    def setUp(self):
-        super(FindPostBySlugTest, self).setUp()
-        self.post_gateway = PostGatewaySQLAlchemy(self.engine.connect(), NOW)
-
+class FindPostBySlugTest(PostGatewayTestCase):
     def test_raise_exception_when_doesnt_find_a_post(self):
         with self.assertRaises(PostNotFoundException):
             self.post_gateway.find_post_by_slug('nice-looking-post')
@@ -85,5 +79,25 @@ class FindPostBySlugTest(DatabaseTestCase):
         Post.insert().values(content).execute()
 
         post = self.post_gateway.find_post_by_slug('nice-looking-post')
+
+        assert_that(post, has_entries({**content, **{'last_updated': NOW, 'id': 1}}))
+
+
+class FindPostByIdTest(PostGatewayTestCase):
+    def test_raise_exception_when_doesnt_find_a_post(self):
+        with self.assertRaises(PostNotFoundException):
+            self.post_gateway.find_post_by_id(999)
+
+    def test_find_post(self):
+        content = {
+            'title': ':title:',
+            'slug': 'nice-looking-post',
+            'content': ':content:',
+            'date': YESTERDAY,
+            'last_updated': NOW
+        }
+        id = Post.insert().values(content).execute().inserted_primary_key[0]
+
+        post = self.post_gateway.find_post_by_id(id)
 
         assert_that(post, has_entries({**content, **{'last_updated': NOW, 'id': 1}}))
